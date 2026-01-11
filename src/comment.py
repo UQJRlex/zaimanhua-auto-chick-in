@@ -3,7 +3,7 @@ import os
 import time
 import random
 from playwright.sync_api import sync_playwright
-from utils import get_all_cookies, create_browser_context, claim_rewards
+from utils import get_all_cookies, create_browser_context, claim_rewards, init_localstorage
 
 # 配置
 MAX_RETRIES = 3
@@ -46,7 +46,7 @@ def save_commented_comic(comic_id):
         print(f"保存评论记录失败: {e}")
 
 
-def post_daily_comment(page):
+def post_daily_comment(page, cookie_str):
     """发表每日评论"""
     print("\n=== 每日评论任务 ===")
     try:
@@ -58,6 +58,9 @@ def post_daily_comment(page):
         print("访问首页获取漫画链接...")
         page.goto('https://www.zaimanhua.com/', wait_until='domcontentloaded')
         page.wait_for_timeout(3000)
+
+        # 设置 localStorage 确保登录状态
+        init_localstorage(page, cookie_str)
 
         # 获取所有漫画详情链接
         comic_links = page.locator("a[href*='/info/']").all()
@@ -106,6 +109,9 @@ def post_daily_comment(page):
         # 访问漫画详情页
         page.goto(comic_url, wait_until='domcontentloaded')
         page.wait_for_timeout(3000)
+
+        # 再次设置 localStorage 确保登录状态
+        init_localstorage(page, cookie_str)
         print(f"漫画页标题: {page.title()}")
 
         # 滚动到评论区
@@ -158,7 +164,7 @@ def run_comment(cookie_str):
 
         try:
             # 发表评论
-            comment_result = post_daily_comment(page)
+            comment_result = post_daily_comment(page, cookie_str)
 
             # 领取积分
             claim_result = claim_rewards(page)

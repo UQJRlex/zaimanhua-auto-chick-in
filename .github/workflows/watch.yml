@@ -9,7 +9,7 @@ on:
 jobs:
   watch:
     runs-on: ubuntu-latest
-    timeout-minutes: 30  # 阅读需要12分钟+缓冲
+    timeout-minutes: 90  # 支持最多5账号 (每账号~12分钟 + 缓冲)
 
     steps:
       - name: Checkout repository
@@ -31,4 +31,6 @@ jobs:
           ZAIMANHUA_COOKIE_1: ${{ secrets.ZAIMANHUA_COOKIE_1 }}
           ZAIMANHUA_COOKIE_2: ${{ secrets.ZAIMANHUA_COOKIE_2 }}
           ZAIMANHUA_COOKIE_3: ${{ secrets.ZAIMANHUA_COOKIE_3 }}
+          ZAIMANHUA_COOKIE_4: ${{ secrets.ZAIMANHUA_COOKIE_4 }}
+          ZAIMANHUA_COOKIE_5: ${{ secrets.ZAIMANHUA_COOKIE_5 }}
         run: python src/watch.py

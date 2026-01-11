@@ -5,6 +5,22 @@
 格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)，
 版本号遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [1.3.1] - 2026-01-12
+
+### Fixed
+
+- 修复评论功能多账号登录状态问题 (`src/comment.py`)
+  - 添加 `init_localstorage` 调用确保 Vue 应用识别登录状态
+  - 在首页和漫画详情页均设置 localStorage
+
+### Changed
+
+- 调整 `watch.yml` 超时时间 30 → 90 分钟，支持最多 5 账号串行执行
+- 统一所有 workflow 的多账号配置，补全 `COOKIE_4` 和 `COOKIE_5` 环境变量
+  - `comment.yml`
+  - `watch.yml`
+  - `lottery.yml`
+
 ## [1.3.0] - 2026-01-12
 
 ### Added
