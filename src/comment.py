@@ -10,7 +10,8 @@ from utils import (
     init_localstorage,
     get_task_list,
     extract_tasks_from_response,
-    extract_user_info_from_cookies
+    extract_user_info_from_cookies,
+    claim_task_reward
 )
 
 # 配置
@@ -238,6 +239,8 @@ def post_daily_comment(page, cookie_str):
 
                 if token:
                     print("验证评论任务状态...")
+                    # 等待服务器更新任务状态
+                    page.wait_for_timeout(3000)
                     task_result = get_task_list(token)
                     if task_result and task_result.get('errno') == 0:
                         tasks = extract_tasks_from_response(task_result)
@@ -255,8 +258,18 @@ def post_daily_comment(page, cookie_str):
                                 comment_task_found = True
                                 status = task.get('status', 0)
                                 print(f"  找到评论任务: ID={task_id}, 名称={task_name}, 状态={status}")
-                                if status == 3:  # 已完成
+                                # 任务状态: 1=未完成, 2=可领取(任务完成等待领取), 3=已完成(已领取)
+                                if status == 3:  # 已完成已领取
                                     print(f"  评论任务验证成功！状态: 已完成")
+                                    save_commented_comic(comic_id)
+                                    return True
+                                elif status == 2:  # 可领取(任务已完成)
+                                    print(f"  评论任务已完成，尝试领取奖励...")
+                                    success, result = claim_task_reward(token, task_id)
+                                    if success:
+                                        print(f"  奖励领取成功！")
+                                    else:
+                                        print(f"  奖励领取失败: {result}")
                                     save_commented_comic(comic_id)
                                     return True
                                 else:
