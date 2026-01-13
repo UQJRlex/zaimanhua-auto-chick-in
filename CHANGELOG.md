@@ -5,6 +5,14 @@
 格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)，
 版本号遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [1.4.1] - 2026-01-13
+
+### Fixed
+
+- 完善抽奖任务二（分享页面）的自动化流程 (`src/lottery.py`)
+  - 点击"去完成"后自动处理弹窗并点击复制按钮
+  - 修复之前只点击按钮但未完成弹窗交互的问题
+
 ## [1.4.0] - 2026-01-13
 
 ### Added

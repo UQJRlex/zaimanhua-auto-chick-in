@@ -171,9 +171,18 @@ def run_lottery_with_browser(cookie_str: str, token: str):
                         try:
                             share_btn.click(timeout=3000)
                             page.wait_for_timeout(1500)
-                            print("      已点击分享按钮")
-                        except:
-                            print("      分享按钮点击失败")
+
+                            # 等待弹窗出现并点击"复制"按钮（图片按钮，class=copyBtn）
+                            copy_btn = page.locator(".copyBtn")
+                            if copy_btn.is_visible(timeout=3000):
+                                copy_btn.click(timeout=3000)
+                                page.wait_for_timeout(1500)
+                                print("      已点击复制按钮，任务完成")
+                            else:
+                                print("      未找到复制按钮")
+
+                        except Exception as e:
+                            print(f"      分享任务失败: {e}")
                     else:
                         print(f"      按钮状态: {btn_text}")
                 else:
