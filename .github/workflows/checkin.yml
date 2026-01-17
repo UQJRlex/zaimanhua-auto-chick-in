@@ -3,7 +3,7 @@ name: Zaimanhua Auto Check-in
 on:
   schedule:
     # UTC 时间，北京时间 = UTC + 8
-    - cron: '0 0 * * *'   # 北京时间 8:00
+    - cron: '40 0 * * *'   # 北京时间 8:40
   workflow_dispatch:       # 支持手动触发
 
 jobs:
