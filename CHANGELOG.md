@@ -5,6 +5,31 @@
 格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)，
 版本号遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [1.5.0] - 2026-01-18
+
+### Added
+
+- 四周年活动自动化功能 (`src/draw_4th.py`)
+  - 活动地址：https://activity.zaimanhua.com/draw-4th/
+  - 活动时间：2026.1.16 - 2026.1.22
+  - 自动发送祝福弹幕
+  - 自动执行转盘抽奖（使用所有可用次数）
+  - 自动关闭中奖弹窗并显示奖品名称
+- 四周年活动 workflow (`draw_4th.yml`)
+  - 北京时间 8:00-18:00，每 20 分钟触发
+  - 支持手动触发
+
+### Technical Notes
+
+- 使用移动端 UA 和 iPhone X 视口 (375x812)
+- Cookie 域名设置为 `activity.zaimanhua.com`
+- 页面选择器：
+  - 弹幕输入框: `.dammu-input`
+  - 发送按钮: `.dammu-send-btn`
+  - 抽奖按钮: `.pointer`
+  - 抽奖次数: `.draw-count`
+  - 中奖弹窗: `.winPrize`
+
 ## [1.4.4] - 2026-01-14
 
 ### Fixed
