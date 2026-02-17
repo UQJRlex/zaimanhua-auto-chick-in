@@ -8,6 +8,7 @@ from utils import extract_user_info_from_cookies, claim_task_reward, get_task_li
 MAX_RETRIES = 5
 PAGE_TIMEOUT = 60000  # 60秒
 CHECKIN_TASK_ID = 8  # "到此一游"签到任务
+VIP_TASK_ID = 16     # "VIP福利"每日领取任务
 
 
 def _make_account_label(default_label, cookie_str):
@@ -105,6 +106,51 @@ def claim_checkin_reward(cookie_str):
                 return False
 
     print(f"未找到签到任务 (ID={CHECKIN_TASK_ID})")
+    return False
+
+
+def claim_vip_reward(cookie_str):
+    """领取VIP福利的每日积分奖励"""
+    user_info = extract_user_info_from_cookies(cookie_str)
+    token = user_info.get('token') if isinstance(user_info, dict) else None
+
+    if not token:
+        print("无法获取 token，跳过VIP福利领取")
+        return False
+
+    # 获取任务列表，检查VIP福利任务状态
+    task_result = get_task_list(token)
+    if not task_result or task_result.get('errno') != 0:
+        print("获取任务列表失败")
+        return False
+
+    tasks = extract_tasks_from_response(task_result)
+    for task in tasks:
+        task_id = task.get('id') or task.get('taskId')
+        task_name = task.get('title') or task.get('name') or task.get('taskName', '未知')
+        status = task.get('status', 0)
+
+        if task_id == VIP_TASK_ID:
+            if status == 2:
+                print(f"发现可领取任务: {task_name} (ID: {task_id})")
+                success, result = claim_task_reward(token, task_id)
+                if success:
+                    print(f"  [OK] VIP福利领取成功！")
+                    return True
+                else:
+                    print(f"  [FAIL] VIP福利领取失败: {result}")
+                    return False
+            elif status == 3:
+                print(f"VIP福利已领取: {task_name}")
+                return True
+            elif status == 1:
+                print(f"VIP福利不可领取（非VIP或未满足条件）: {task_name}")
+                return False
+            else:
+                print(f"VIP福利状态未知: {task_name} (status={status})")
+                return False
+
+    print(f"未找到VIP福利任务 (ID={VIP_TASK_ID})，可能非VIP账号")
     return False
 
 
@@ -229,6 +275,10 @@ def main():
             # 签到成功后领取积分
             print("\n--- 领取签到积分 ---")
             claim_checkin_reward(cookie_str)
+
+            # 领取VIP福利
+            print("\n--- 领取VIP福利 ---")
+            claim_vip_reward(cookie_str)
         else:
             all_success = False
 
