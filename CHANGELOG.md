@@ -5,6 +5,29 @@
 格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)，
 版本号遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [1.9.0] - 2026-03-24
+
+### Added
+
+- 新增原创征稿季活动自动化 (`src/yuanchuang.py`)
+  - 活动入口：https://yuanchuang.zaimanhua.com/2026spring/
+  - 使用手机端 UA 访问活动页
+  - 自动完成关注主办官号、分享页面、阅读参赛作品任务
+  - 阅读任务支持网页访问失败后回退到 `auto_read.py` 的 API 模拟阅读
+  - 自动用完所有可用抽奖次数
+  - 明确不包含自动投票功能
+- 新增原创征稿季 workflow (`yuanchuang.yml`)
+  - 北京时间 11:30 每天触发一次
+  - 支持手动触发
+
+### Technical Notes
+
+- API Base URL: `https://yuanchuang.zaimanhua.com`
+- 活动入口：`https://yuanchuang.zaimanhua.com/2026spring/`
+- 签名: `sign = MD5(channel + timestamp + "z&m$h*_318345twt")`
+- 端点: `draw_load`(状态)、`follow`(关注)、`share`(分享)、`drawing`(抽奖)
+- 阅读任务优先尝试 Playwright 访问活动页/漫画详情页，未生效时回退到 `ZaimanhuaAppReader.simulate_reading()`
+
 ## [1.8.0] - 2026-02-15
 
 ### Added

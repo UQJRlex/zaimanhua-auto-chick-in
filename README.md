@@ -10,6 +10,7 @@
 | 每日评论 | 在随机漫画下发表评论 | 9:30 |
 | 每日阅读 | 自动阅读漫画 | 10:00 |
 | 每日抽奖 | 完成任务并自动抽奖 | 11:00 |
+| 原创征稿季 | 完成任务并自动抽奖 | 11:30 |
 | 四周年活动 | 发送祝福 + 转盘抽奖 | 5:00-23:00 每20分钟 |
 | 新年活动 | 完成任务 + 祝福抽奖 | 8:00-23:00 每15分钟 |
 | 积分领取 | 任务完成后自动领取积分 | 随任务执行 |
@@ -30,6 +31,20 @@
 > - 该页面需要在**手机端**或**移动端浏览器**访问
 > - **首次使用**需要手动关注官方微博，之后脚本可自动完成任务
 > - 抽奖任务包括：关注微博、分享页面、阅读漫画
+
+### 原创征稿季活动说明
+
+活动入口：https://yuanchuang.zaimanhua.com/2026spring/
+
+> **功能说明：**
+> - **关注主办官号**：自动完成关注任务并获得抽奖次数
+> - **分享页面**：自动完成分享任务并获得抽奖次数
+> - **阅读参赛作品**：优先尝试网页访问，必要时回退到 API 模拟阅读完成任务
+> - **自动抽奖**：用完所有可用抽奖次数
+>
+> **触发频率：** 北京时间 11:30，每天触发一次
+>
+> **注意：** 脚本使用手机端 UA 访问活动页；当前不包含自动投票功能
 
 ### 四周年活动说明
 
@@ -108,6 +123,7 @@
    - **Daily Comment** - 评论
    - **Daily Watch** - 阅读
    - **Daily Lottery** - 抽奖
+   - **Yuanchuang Activity** - 原创征稿季
    - **New Year Activity** - 新年活动
 3. 点击 **Run workflow** → 选择分支 → **Run workflow**
 4. 查看运行日志确认任务成功
@@ -135,17 +151,19 @@
 │   ├── comment.py      # 评论脚本
 │   ├── auto_read.py    # 阅读脚本 (API 模拟)
 │   ├── lottery.py      # 抽奖脚本
+│   ├── yuanchuang.py   # 原创征稿季脚本
 │   ├── draw_4th.py     # 四周年活动脚本
 │   ├── 2026new_year.py # 新年活动脚本
 │   └── utils.py        # 共享工具函数
 ├── .github/workflows/
-│   ├── checkin.yml     # 签到 workflow
-│   ├── comment.yml     # 评论 workflow
-│   ├── watch.yml       # 阅读 workflow
-│   ├── lottery.yml     # 抽奖 workflow
-│   ├── draw_4th.yml    # 四周年活动 workflow
+│   ├── checkin.yml      # 签到 workflow
+│   ├── comment.yml      # 评论 workflow
+│   ├── watch.yml        # 阅读 workflow
+│   ├── lottery.yml      # 抽奖 workflow
+│   ├── yuanchuang.yml   # 原创征稿季 workflow
+│   ├── draw_4th.yml     # 四周年活动 workflow
 │   └── 2026new_year.yml # 新年活动 workflow
-└── requirements.txt    # Python 依赖
+└── requirements.txt     # Python 依赖
 ```
 
 ## 任务时间表
@@ -156,6 +174,7 @@
 | 评论 | 01:30 | 09:30 |
 | 阅读 | 02:00 | 10:00 |
 | 抽奖 | 03:00 | 11:00 |
+| 原创征稿季 | 03:30 | 11:30 |
 | 四周年活动 | 21:00-15:00 每20分钟 | 5:00-23:00 每20分钟 |
 | 新年活动 | 0:00-15:00 每15分钟 | 8:00-23:00 每15分钟 |
 
